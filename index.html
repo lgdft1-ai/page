@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Emoji起始页</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 16vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    transition: background 0.5s ease;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #14151f 0%, #1c1d2b 100%);
+    color: #e5e7eb;
+}
+
+.greet {
+    font-size: 16px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+body.dark .greet {
+    color: #9ca3af;
+}
+
+.time {
+    font-size: 88px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+body.dark .time {
+    color: #f3f4f6;
+}
+
+.date {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+body.dark .date {
+    color: #9ca3af;
+}
+
+.icon-box {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.icon-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.icon-item {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 28px;
+}
+
+body.dark .icon-item {
+    background: #272838;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+
+.icon-item:hover {
+    transform: translateY(-4px);
+}
+
+.icon-name {
+    font-size: 13px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+body.dark .icon-name {
+    color: #9ca3af;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 580px;
+    height: 52px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    padding: 0 16px;
+}
+
+body.dark .search-box {
+    background: #272838;
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+
+.engine-wrap {
+    position: relative;
+    width: 70px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.engine-select {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    color: #4b5563;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: center;
+    text-align-last: center;
+    padding-right: 14px;
+    cursor: pointer;
+}
+
+body.dark .engine-select {
+    color: #d1d5db;
+}
+
+.engine-select option {
+    background: #f5f7fa;
+    color: #1f2937;
+}
+
+body.dark .engine-select option {
+    background: #1c1d2b;
+    color: #e5e7eb;
+}
+
+.engine-wrap::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #9ca3af;
+    transition: transform 0.2s ease;
+}
+
+.engine-wrap:hover::after {
+    border-top-color: #22c55e;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.engine-wrap:focus-within::after {
+    transform: translateY(-50%) rotate(180deg);
+    border-top-color: #22c55e;
+}
+
+.line {
+    width: 1px;
+    height: 24px;
+    background: #d1d5db;
+    margin: 0 10px;
+}
+
+body.dark .line {
+    background: #4b5563;
+}
+
+.search-input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    color: #1f2937;
+}
+
+body.dark .search-input {
+    color: #f3f4f6;
+}
+
+.search-input::placeholder {
+    color: #9ca3af;
+}
+
+.top-wrap {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.top-btn {
+    font-size: 14px;
+    cursor: pointer;
+    color: #6b7280;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+body.dark .top-btn {
+    color: #9ca3af;
+}
+
+.top-btn:hover {
+    color: #22c55e;
+}
+
+.edit-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.edit-content {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 80vh;
+    overflow: auto;
+}
+
+body.dark .edit-content {
+    background: #272838;
+}
+
+.edit-item {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    align-items: center;
+}
+
+.edit-item select,
+.edit-item input {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+    color: #333;
+}
+
+body.dark .edit-item select,
+body.dark .edit-item input {
+    background: #333;
+    border-color: #444;
+    color: #eee;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 4px;
+    font-size: 14px;
+}
+
+.btn-save {
+    background: #22c55e;
+    color: #fff;
+}
+
+.btn-del {
+    background: #ef4444;
+    color: #fff;
+}
+
+.emoji-preview {
+    font-size: 26px;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<div class="top-wrap">
+    <div class="greet" id="greet"></div>
+    <button class="top-btn" id="themeToggle">🌙 夜间模式</button>
+    <button class="top-btn" id="editIconBtn">✏️ 编辑图标</button>
+</div>
+
+<div class="time" id="time">00:00</div>
+<div class="date" id="date"></div>
+
+<div class="icon-box" id="iconBox"></div>
+
+<div class="search-box">
+    <div class="engine-wrap">
+        <select class="engine-select" id="engine">
+            <option value="bing">必应</option>
+            <option value="baidu">百度</option>
+            <option value="google">谷歌</option>
+        </select>
+    </div>
+    <div class="line"></div>
+    <input type="text" class="search-input" id="input" placeholder="搜索一下" autocomplete="off">
+</div>
+
+<div class="edit-modal" id="editModal">
+    <div class="edit-content" id="editContent"></div>
+</div>
+
+<script>
+const body = document.body;
+const themeToggle = document.getElementById("themeToggle");
+const editIconBtn = document.getElementById("editIconBtn");
+const editModal = document.getElementById("editModal");
+const editContent = document.getElementById("editContent");
+const iconBox = document.getElementById("iconBox");
+const greetEl = document.getElementById("greet");
+const timeEl = document.getElementById("time");
+const dateEl = document.getElementById("date");
+const input = document.getElementById("input");
+const engine = document.getElementById("engine");
+
+const emojiList = [
+    "⭐","🔍","🌐","🖥️","☁️","📺","🎵","💬","🧩","📚",
+    "📁","💻","📱","🎮","🛒","📰","💼","📧","📝","🎯"
+];
+
+let defaultIcons = [
+    {emoji:"🔍",name:"百度",url:"https://www.baidu.com"},
+    {emoji:"🖥️",name:"我的飞牛OS",url:"https://www.005290.xyz"},
+    {emoji:"🌐",name:"必应",url:"https://www.bing.com"},
+    {emoji:"☁️",name:"网盘",url:"https://pan.baidu.com"},
+    {emoji:"📚",name:"谷歌",url:"https://www.google.com"}
+];
+
+let iconList;
+try{
+    iconList = JSON.parse(localStorage.getItem("emojiIconList")) || defaultIcons;
+}catch(e){
+    iconList = defaultIcons;
+    localStorage.setItem("emojiIconList",JSON.stringify(defaultIcons));
+}
+
+function renderIcons(){
+    iconBox.innerHTML = "";
+    iconList.forEach(item=>{
+        let wrap = document.createElement("div");
+        wrap.className = "icon-wrap";
+        let iconDom = document.createElement("div");
+        iconDom.className = "icon-item";
+        iconDom.innerText = item.emoji;
+        let nameDom = document.createElement("div");
+        nameDom.className = "icon-name";
+        nameDom.innerText = item.name || "站点";
+        wrap.appendChild(iconDom);
+        wrap.appendChild(nameDom);
+        wrap.onclick = ()=>window.open(item.url,"_blank");
+        iconBox.appendChild(wrap);
+    });
+}
+
+function getGreet(h){
+    if(h<6)return "🌙 夜深了";
+    if(h<12)return "☀️ 早上好";
+    if(h<18)return "🌤️ 下午好";
+    return "🌙 晚上好";
+}
+
+// 判断是否白天 6:00-18:00
+function isDayTime(){
+    let h = new Date().getHours();
+    return h >= 6 && h < 18;
+}
+
+// 设置主题
+function setTheme(dark){
+    dark ? body.classList.add("dark") : body.classList.remove("dark");
+    themeToggle.innerHTML = dark ? "☀️ 日间模式" : "🌙 夜间模式";
+}
+
+// 自动时间匹配主题 + 不覆盖手动选择
+function initTheme(){
+    let saveMode = localStorage.getItem("limeDark");
+    // 如果没有手动记录，就按时间自动切换
+    if(saveMode === null){
+        setTheme(!isDayTime());
+    }else{
+        setTheme(saveMode === "1");
+    }
+}
+
+// 每秒更新时间
+function updateAllTime(){
+    const now=new Date();
+    let y=now.getFullYear();
+    let m=now.getMonth()+1;
+    let d=now.getDate();
+    let h=now.getHours();
+    let min=String(now.getMinutes()).padStart(2,"0");
+
+    timeEl.innerText=`${h}:${min}`;
+
+    const weekArr=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    dateEl.innerText=`${y}年${m}月${d}日 ${weekArr[now.getDay()]}`;
+
+    greetEl.innerText=getGreet(h);
+}
+
+// 手动切换主题
+themeToggle.onclick=()=>{
+    let nowDark = body.classList.contains("dark");
+    setTheme(!nowDark);
+    localStorage.setItem("limeDark", nowDark ? "0" : "1");
+};
+
+// 编辑图标逻辑
+editIconBtn.onclick=function(){
+    editContent.innerHTML="";
+    iconList.forEach((item,idx)=>{
+        let wrap=document.createElement("div");
+        wrap.className="edit-item";
+        let preview=document.createElement("span");
+        preview.className="emoji-preview";
+        preview.textContent=item.emoji;
+        let sel=document.createElement("select");
+        sel.className="emojiSel";
+        emojiList.forEach(e=>{
+            let opt=document.createElement("option");
+            opt.value=e;
+            opt.textContent=e;
+            if(e===item.emoji)opt.selected=true;
+            sel.appendChild(opt);
+        });
+        let nameInput=document.createElement("input");
+        nameInput.className="nameIpt";
+        nameInput.value=item.name||"";
+        nameInput.placeholder="名称";
+        let urlInput=document.createElement("input");
+        urlInput.className="urlIpt";
+        urlInput.value=item.url;
+        urlInput.placeholder="网址";
+        let delBtn=document.createElement("button");
+        delBtn.className="btn btn-del";
+        delBtn.textContent="删除";
+        delBtn.onclick=function(){
+            iconList.splice(idx,1);
+            editIconBtn.click();
+        };
+        wrap.appendChild(preview);
+        wrap.appendChild(sel);
+        wrap.appendChild(nameInput);
+        wrap.appendChild(urlInput);
+        wrap.appendChild(delBtn);
+        editContent.appendChild(wrap);
+    });
+    let btnWrap=document.createElement("div");
+    btnWrap.style.textAlign="center";
+    let addBtn=document.createElement("button");
+    addBtn.className="btn";
+    addBtn.textContent="新增";
+    addBtn.onclick=function(){
+        iconList.push({emoji:"⭐",name:"新站点",url:"https://"});
+        editIconBtn.click();
+    };
+    let saveBtn=document.createElement("button");
+    saveBtn.className="btn btn-save";
+    saveBtn.textContent="保存";
+    saveBtn.onclick=function(){
+        let sels=document.querySelectorAll(".emojiSel");
+        let nameIpts=document.querySelectorAll(".nameIpt");
+        let urlIpts=document.querySelectorAll(".urlIpt");
+        let arr=[];
+        for(let i=0;i<sels.length;i++){
+            arr.push({
+                emoji:sels[i].value,
+                name:nameIpts[i].value.trim()||"站点",
+                url:urlIpts[i].value.trim()||"https://"
+            });
+        }
+        iconList=arr;
+        localStorage.setItem("emojiIconList",JSON.stringify(arr));
+        renderIcons();
+        editModal.style.display="none";
+    };
+    btnWrap.appendChild(addBtn);
+    btnWrap.appendChild(saveBtn);
+    editContent.appendChild(btnWrap);
+    editModal.style.display="flex";
+};
+editModal.onclick=function(e){
+    if(e.target===editModal)editModal.style.display="none";
+};
+
+input.addEventListener("keydown",e=>{
+    if(e.key!=="Enter")return;
+    let val=input.value.trim();
+    if(!val)return;
+    let url;
+    switch(engine.value){
+        case "baidu":url=`https://www.baidu.com/s?wd=${encodeURIComponent(val)}`;break;
+        case "google":url=`https://www.google.com/search?q=${encodeURIComponent(val)}`;break;
+        default:url=`https://www.bing.com/search?q=${encodeURIComponent(val)}`;
+    }
+    window.open(url,"_blank");
+});
+
+// 初始化
+renderIcons();
+initTheme();
+updateAllTime();
+setInterval(updateAllTime,1000);
+</script>
+</body>
+</html>
